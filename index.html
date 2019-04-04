@@ -142,35 +142,19 @@
     //Fonction qui se lance une fois que la base de données Gdocs est chargée
     letsgeaux = function(){
 
-      //Compter le nombre de morceaux dans la base et l'afficher
-      var morceaux = tableau.length;
+      var stats = {};
+      stats.tracksCount = tableau.length;
+      stats.countriesList = [];
+      stats.citiesList = [];
 
-      //Compter le nombre de morceaux uniques par pays
-      temp = [];
-      pays_uniques = [];
-
-      for(var i=0;i<tableau.length;i++){
-        if(temp.indexOf(tableau[i].pays) == -1){
-          temp.push(tableau[i].pays);
-          var _data = {};
-          _data.name = tableau[i].ville;
-          _data.iso3 = tableau[i].iso3;
-          _data.pays = tableau[i].pays;
-          _data.count = 1;
-          _data.nbville = tableau[i].nbville;
-          _data.latitude = tableau[i].latitude;
-          _data.longitude = tableau[i].longitude;
-
-          pays_uniques.push(_data);
-        }else{
-          for(var j=0;j<pays_uniques.length;j++){
-            if(pays_uniques[j].pays === tableau[i].pays){
-              var _x = parseInt(pays_uniques[j].count) + 1;
-              pays_uniques[j].count = _x;
-            }
-          }
+      $.each(tableau, function (i, track) {
+        if($.inArray(track.pays, stats.countriesList) === -1) {
+          stats.countriesList.push(track.pays);
         }
-      }
+        if($.inArray(track.ville, stats.citiesList) === -1) {
+          stats.citiesList.push(track.pays);
+        }
+      })
 
       //COMPTER LE NOMBRE DE MORCEAUX PAR VILLE UNIQUE
       //On utilise pour ça deux tableaux qu'on va réutiliser tout le temps
@@ -201,11 +185,7 @@
         }
       }
 
-      //Mise à jour de la phrase de sous-titre
-      nb_pays = pays_uniques.length - 1
-      nb_villes = produce.length - 1
-
-      $(".phrase_titre").html("<span class=\"enJaune\">"+nb_pays+"</span> pays / <span class=\"enJaune\">"+nb_villes+"</span> villes / <span class=\"enJaune\">"+morceaux+"</span> morceaux")
+      $(".phrase_titre").html("<span class=\"enJaune\">"+stats.countriesList.length+"</span> pays / <span class=\"enJaune\">"+stats.citiesList.length+"</span> villes / <span class=\"enJaune\">"+stats.tracksCount +"</span> morceaux")
 
       //Caler les dimensions du conteneur
       width = $(".conteneur").width(),
