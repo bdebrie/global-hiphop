@@ -1,0 +1,240 @@
+@import url('https://fonts.googleapis.com/css?family=Merriweather|Source+Sans+Pro:200|Source+Sans+Pro:400|Source+Sans+Pro:600');
+@import url('https://fonts.googleapis.com/css?family=Oswald:300,400,600');
+
+
+body{
+  margin: 0;
+  padding: 0;
+  background: snow;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  font-smoothing: antialiased;
+  -moz-font-smoothing: antialiased;
+  -webkit-font-smoothing: antialiased;
+  background: url(../img/concrete.jpg) no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+
+}
+
+h1{
+  font-family: Oswald;
+  text-transform: uppercase;
+  font-weight: 600;
+  font-size: 2em;
+  margin: 0;
+  padding: 0;
+  color: rgba(71,63,61,1);
+  /*color: rgba(205,31,44,1);*/
+  line-height: 1em;
+  text-align: center;
+}
+
+.phrase_titre{
+  font-family: Oswald;
+  font-weight: 400;
+  font-size: 1.2em;
+  color: rgba(71,63,61,0.8);
+  line-height: 1.2em;
+  margin: 0;
+  padding: 0;
+  margin-top: 10px;
+  text-align: center;
+}
+
+
+#phrase{
+  font-family: Source Sans Pro;
+  font-weight: 200;
+  margin: 0;
+  margin-top: 10px;
+  padding: 0;
+  line-height: 1.2em;
+  font-size: 1.2em;
+}
+
+#texte{
+  font-family: Oswald;
+  font-weight: 400;
+  color: rgba(71,63,61,1);
+  max-width: 900px;
+  text-align: center;
+  padding-left: 15%;
+  padding-right: 15%;
+  font-size: 1.3em;
+  margin: 0;
+}
+
+#nom_pays_france, #ville_selec, .exergue{
+  font-weight: 600;
+}
+
+#ville_selec, #nom_pays_france{
+  margin: 0;
+  margin-bottom: 5px;
+}
+
+#texte p{
+  text-decoration: none;
+  cursor: pointer;
+  color: rgba(71,63,61,1);
+  transition: all 0.2s;
+  /*padding-left: 3px;
+  padding-right: 3px;*/
+    background-size: 100% 200%;
+    background-image: linear-gradient(to bottom,
+                          transparent,
+                          transparent 50%,
+                          rgb(255, 237, 0) 50%,
+                          rgb(255, 237, 0));
+    transition: background-position 0.2s;
+}
+
+#texte p:hover{
+  color: black;
+  background-position: 0% 100%;
+}
+
+.ui-tooltip {
+    max-width: 250px;
+    border: 0;
+    transition: 0;
+    opacity: 0.90;
+    color: snow;
+    font-size: 18px;
+    background: black;
+    opacity: 0.9;
+    font-family: Oswald;
+    font-weight: 400;
+    -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+}
+
+.ui-tooltip-content {
+    position: relative;
+    padding: 0.6em;
+    text-align: center;
+}
+
+.conteneur{
+  margin: 0;
+  padding: 0;
+  max-width: 1000px;
+  position: relative;
+  margin-bottom: 35px;
+}
+
+.carte{
+  z-index: 2;
+  position: relative;
+}
+
+#mon_svg{
+  margin: 0;
+  padding: 0;
+  /*position: absolute;*/
+  z-index: 1;
+}
+
+#mon_svg circle{
+  cursor: pointer;
+}
+
+.background{
+  fill: none;
+  pointer-events: all;
+}
+
+hr {
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 2px solid rgba(123,121,121,1);
+    margin: 1em 0;
+    padding: 0;
+    margin-top: 2px;
+    margin-bottom: 3px;
+}
+
+.pays{
+  fill: rgba(123,121,121,1);
+  stroke: rgba(110,109,109,1);
+/*  stroke: rgba(108,106,106,1);
+  stroke-width: 0.5px;*/
+}
+
+.pays.active {
+  fill: rgba(255,237,0,0.5)!important;
+}
+
+.ville_double_artistes, .villes_concernees{
+  margin: 0;
+  padding: 0;
+  display: inline-block;
+  z-index: 999;
+  background: rgba(123,121,121,0.8);
+  padding-left: 3px;
+  padding-right: 3px;
+}
+
+#player_controls{
+  margin-top: 0!important;
+}
+
+.nom_pays_france{
+  margin-bottom: 8px;
+}
+
+#voir_liste{
+  cursor: pointer;
+}
+
+#conteneur_liste{
+  background: rgba(255,255,255,0.92);
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 99999;
+  overflow: hidden;
+  display: none;
+}
+
+#the_liste{
+  margin-top: 5px;
+  /*margin-bottom: 5%;*/
+  overflow-y: scroll;
+  text-align: center;
+}
+
+.liste_titre_pays{
+  font-family: Oswald;
+  text-transform: uppercase;
+  font-weight: 600;
+  font-size: 1.5em;
+  margin: 0;
+  padding: 0;
+  color: rgba(71,63,61,1);
+  /*color: rgba(205,31,44,1);*/
+  line-height: 1em;
+  text-align: center;
+}
+
+.liste_pays{
+  margin: 0;
+  padding: 0;
+  margin-top: 15px;
+  margin-bottom: 20px;
+}
+
+.liste_pays li{
+  list-style-type: none;
+  font-family: Source Sans Pro;
+  color: rgba(71,63,61,0.7);
+  margin: 0;
+  padding: 0;
+}
+
+
