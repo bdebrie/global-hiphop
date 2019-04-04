@@ -142,12 +142,8 @@
     //Fonction qui se lance une fois que la base de données Gdocs est chargée
     letsgeaux = function(){
 
-
       //Compter le nombre de morceaux dans la base et l'afficher
-      var morceaux = 0
-      $.each(tableau, function(i){
-        morceaux = morceaux+1
-      })
+      var morceaux = tableau.length;
 
       //Compter le nombre de morceaux uniques par pays
       temp = [];
