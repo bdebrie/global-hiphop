@@ -188,26 +188,17 @@
       $(".phrase_titre").html("<span class=\"enJaune\">"+stats.countriesList.length+"</span> pays / <span class=\"enJaune\">"+stats.citiesList.length+"</span> villes / <span class=\"enJaune\">"+stats.tracksCount +"</span> morceaux")
 
       //Caler les dimensions du conteneur
-      width = $(".conteneur").width(),
-        height = $(".conteneur").height(),
-        //Ratio pour la taille des cercles
-        ratio = 6;
+      width = $(".conteneur").width();
+      height = $(".conteneur").height();
+      ratio = 6;
+      scale = largeur > 1200 ? height / 2.8 : width / 5;
 
-        //Initialiser la projection
-        if(largeur > 1200){
-          projection = d3.geo.orthographic()
-            .scale(height/2.8)
-            .translate([width / 2, height / 2])
-            .clipAngle(90)
-            .precision(.1);
-        }else{
-          projection = d3.geo.orthographic()
-            .scale(width/5)
-            .translate([width / 2, height / 2])
-            .clipAngle(90)
-            .precision(.1);
-        }
-
+      //Initialiser la projection
+      projection = d3.geo.orthographic()
+        .scale(scale)
+        .translate([width / 2, height / 2])
+        .clipAngle(90)
+        .precision(.1);
 
       //Le zoom
       var zoom = d3.behavior.zoom()
