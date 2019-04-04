@@ -120,16 +120,8 @@
 
         // La fonction à appeler lorsque le document est chargé
         onComplete: function(data) {
-          //On compile la data du Google Doc dans un nouveau tableau html...
-          //...pour ça, on crée d'abord un tableau vierge...
-            tableau = [];
-            // ...puis, parcourir le document ligne après ligne...
-            $.each(doc.get(), function(i, line) {
-              //... et ajouter chaque ligne au tableau
-                tableau.push(line)
-            });
-            //Une fois tout ça fait, on lance letsgo, notre fonction principale
-            letsgeaux();
+          tableau = doc.get();
+          letsgeaux();
         },
 
         // La fonction à appeler lorsque qu'une erreur survient dans le chargement
