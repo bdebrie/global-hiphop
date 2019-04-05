@@ -20,7 +20,6 @@ $(document).ready(function(){
   }
 
 showCities = false;
-didYouJustDezoom="non"
 resetScale=200
 tableCompteur = []
 tableauISO = []
@@ -334,8 +333,6 @@ $(window).load(function () {
 
       pathG.attr("transform", "translate(" + d3.event.translate + ")scale(1).event)");
       pathG.selectAll("path.boundary").style("stroke-width", 0.5 / d3.event.scale);
-      didYouJustDezoom = "non"
-
     }
 
     function zoomedEnhanced(){
