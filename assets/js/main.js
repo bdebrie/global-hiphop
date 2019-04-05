@@ -10,24 +10,23 @@ $(document).ready(function(){
     var windowWidth = $(window).width();
 
     //Les affecteur comme taille au conteneur (qui a une width bloquée sur 850px en css)
-    $globe.css('width', windowWidth)
-    $globe.css('height', windowHeight / 10 * 8.5)
-    $container.css('padding-top', windowHeight / 10 * 1.5)
+    $globe.css('width', windowWidth);
+    $globe.css('height', windowHeight / 10 * 8.5);
+    $container.css('padding-top', windowHeight / 10 * 1.5);
 
-    $volume.hide()
+    $volume.hide();
   } else {
     window.location.href = "mobile/index.html";
   }
 
-showCities = false;
-resetScale=200
-tableCompteur = []
-tableauISO = []
-var tableauHistorique = []
-distanceTotale = 0
-firstTimeDistance = "oui"
-onglet_distances_ouvert = "non"
-historiqueDistance = []
+var showCities = false;
+var tableCompteur = [];
+var tableauISO = [];
+var tableauHistorique = [];
+var distanceTotale = 0;
+var firstTimeDistance = true;
+var onglet_distances_ouvert = false;
+var historiqueDistance = [];
 
 
 //  ######    #######   #######   ######   ##       ######## ########   #######   ######
@@ -1029,7 +1028,7 @@ $(window).load(function () {
       // console.log(distance(latDebut, longDebut, latFin, longFin, "K"))
 
 
-      if(firstTimeDistance == "oui"){
+      if(firstTimeDistance){
         newDistance = distance(latDebut, longDebut, latFin, longFin, "K")
         distanceTotale = newDistance
       }else{
@@ -1062,9 +1061,9 @@ $(window).load(function () {
       $("#grande_distance").html("<span class=\"engras\">Distance la plus longue</span><br>" + villeMaxDebut + " (" + paysMaxDebut + ") > " + villeMaxFin + " (" + paysMaxFin + ")<br><span class=\"span_total\">" + sepMil(Math.round(distanceMax)) + " km</span>")
       //console.log(trackDebut, latDebut, longDebut, trackFin, latFin, longFin)
 
-      if(firstTimeDistance =="oui"){
-        firstTimeDistance = "non"
-        onglet_distances_ouvert = "oui"
+      if(firstTimeDistance){
+        firstTimeDistance = true;
+        onglet_distances_ouvert = true;
         $("#compteur_distances").css("top", function(){
           return hauteur - $(this).height()+"px"
         })
@@ -1138,14 +1137,14 @@ $(window).load(function () {
 
     //Pour afficher/masquer le panneau des distances
     $("#onglet_distances").click(function(){
-      if(onglet_distances_ouvert == "oui"){
+      if(onglet_distances_ouvert){
         $("#compteur_distances").css("top", "100vh")
-        onglet_distances_ouvert = "non"
+        onglet_distances_ouvert = false;
       }else{
         $("#compteur_distances").css("top", function(){
           return hauteur - $(this).height()+"px"
         })
-        onglet_distances_ouvert = "oui"
+        onglet_distances_ouvert = true;
       }
     })
 
@@ -1404,7 +1403,7 @@ $(window).load(function () {
       $("#conteneur_noms, #conteneur_chiffres, #conteneur_barres").empty()
 
       //Distances
-      firstTimeDistance = "oui"
+      firstTimeDistance = true;
       historiqueDistance = []
       g_trajet.selectAll("path").remove()
       $("#total_distances, #grande_distance").html("")
@@ -1415,7 +1414,7 @@ $(window).load(function () {
 
     $("#reinit_distance").click(function(){
       //Distances
-      firstTimeDistance = "oui"
+      firstTimeDistance = true;
       // onglet_distances_ouvert = "non"
       historiqueDistance = []
       g_trajet.selectAll("path").remove()
