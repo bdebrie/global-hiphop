@@ -19,61 +19,30 @@ $(document).ready(function(){
     window.location.href = "mobile/index.html";
   }
 
-var showCities = false;
-var tableCompteur = [];
-var tableauISO = [];
-var tableauHistorique = [];
-var distanceTotale = 0;
-var firstTimeDistance = true;
-var onglet_distances_ouvert = false;
-var historiqueDistance = [];
+  // Init main variables
+  var showCities = false;
+  var tableCompteur = [];
+  var tableauISO = [];
+  var tableauHistorique = [];
+  var distanceTotale = 0;
+  var firstTimeDistance = true;
+  var onglet_distances_ouvert = false;
+  var historiqueDistance = [];
 
-
-//  ######    #######   #######   ######   ##       ######## ########   #######   ######
-// ##    ##  ##     ## ##     ## ##    ##  ##       ##       ##     ## ##     ## ##    ##
-// ##        ##     ## ##     ## ##        ##       ##       ##     ## ##     ## ##
-// ##   #### ##     ## ##     ## ##   #### ##       ######   ##     ## ##     ## ##
-// ##    ##  ##     ## ##     ## ##    ##  ##       ##       ##     ## ##     ## ##
-// ##    ##  ##     ## ##     ## ##    ##  ##       ##       ##     ## ##     ## ##    ##
-//  ######    #######   #######   ######   ######## ######## ########   #######   ######
-
-
-
-
-$(window).load(function () {
-  // Création de l'instance de Gselper
+  // Load DB
   var doc = new Gselper({
-
-      // Identifiant du document
-      key: "18l3q89q0UZAv42nqpHkmbainbFumD13wUcLOP3BEky4",
-
-      // Le worksheet du document (od6 = la première feuille par défaut)
-      worksheet: "od6",
-
-      // La fonction à appeler lorsque le document est chargé
-      onComplete: function(data) {
-        tableau = doc.get();
-        letsgeaux();
-      },
-
-      // La fonction à appeler lorsque qu'une erreur survient dans le chargement
-      onFail: function(data) {
-          console.log( "Something happened. Something happened." );
-      }
+    key: "18l3q89q0UZAv42nqpHkmbainbFumD13wUcLOP3BEky4",
+    worksheet: "od6",
+    onComplete: function(data) {
+      tableau = doc.get();
+      init();
+    },
+    onFail: function(data) {
+      console.log( "Something happened. Something happened." );
+    }
   });
 
-
-
-
-
-
-
-
-
-
-  //Fonction qui se lance une fois que la base de données Gdocs est chargée
-  letsgeaux = function(){
-
+  displayStats = function () {
     var stats = {};
     stats.tracksCount = tableau.length;
     stats.countriesList = [];
@@ -118,6 +87,12 @@ $(window).load(function () {
     }
 
     $(".phrase_titre").html("<span class=\"enJaune\">"+stats.countriesList.length+"</span> pays / <span class=\"enJaune\">"+stats.citiesList.length+"</span> villes / <span class=\"enJaune\">"+stats.tracksCount +"</span> morceaux")
+  }
+
+  init = function () {
+
+    displayStats();
+
 
     //Caler les dimensions du conteneur
     containerWidth = $container.width();
@@ -132,183 +107,183 @@ $(window).load(function () {
       .clipAngle(90)
       .precision(.1);
 
-    //Le zoom
-    var zoom = d3.behavior.zoom()
-            .on("zoom",zoomed);
+    // //Le zoom
+    // var zoom = d3.behavior.zoom()
+    //         .on("zoom",zoomed);
 
 
-    var zoomEnhanced = d3.geo.zoom().projection(projection)
-            .scaleExtent([250,2500])
-            .on("zoom",zoomedEnhanced);
+    // var zoomEnhanced = d3.geo.zoom().projection(projection)
+    //         .scaleExtent([250,2500])
+    //         .on("zoom",zoomedEnhanced);
 
-    //Le drag
-    var drag = d3.behavior.drag()
-              .origin(function() { var r = projection.rotate(); return {x: r[0], y: -r[1]}; })
-              .on("drag", dragged)
-              .on("dragstart", dragstarted)
-              .on("dragend", dragended);
+    // //Le drag
+    // var drag = d3.behavior.drag()
+    //           .origin(function() { var r = projection.rotate(); return {x: r[0], y: -r[1]}; })
+    //           .on("drag", dragged)
+    //           .on("dragstart", dragstarted)
+    //           .on("dragend", dragended);
 
-    //Centrer le globe comme on veut
-    origin = [2, -50];
-    projection.rotate(origin);
+    // //Centrer le globe comme on veut
+    // origin = [2, -50];
+    // projection.rotate(origin);
 
-    //Créer le géopath et le graticule
-    path = d3.geo.path()
-        .projection(projection);
+    // //Créer le géopath et le graticule
+    // path = d3.geo.path()
+    //     .projection(projection);
 
-    var graticule = d3.geo.graticule();
+    // var graticule = d3.geo.graticule();
 
-    //Et appender un svg sur la div
-    svg = d3.select("#globe").append("svg")
-      .attr("id", "le_svg")
-        .attr("width", containerWidth)
-        .attr("height", containerHeight);
-
-
-    pathG = svg.append("g").attr("class", "pathG");
-
-    //Pour mettre une couleur de fond au globe
-    pathG.append("path")
-      .datum({type: "Sphere"})
-      .attr("class", "water")
-      .attr("d", path)
-      .attr("stroke-width", 30)
-      .attr("stroke", "white")
-      .attr("fill", "white")
+    // //Et appender un svg sur la div
+    // svg = d3.select("#globe").append("svg")
+    //   .attr("id", "le_svg")
+    //     .attr("width", containerWidth)
+    //     .attr("height", containerHeight);
 
 
-    //Rectangle de hover pour les actions utilisateur
-    pathG.append("rect")
-            .attr("class", "overlay")
-            .attr("width", containerWidth)
-            .attr("height", containerHeight)
-            .call(zoomEnhanced)
-            .on("mousedown", stopAnimation)
-            .on("dblclick.zoom", null)
-            .on("contextmenu", function (d, i) {
-                    //Empêcher le clic droit pour éviter bug de drag
-                d3.event.preventDefault();
-            })
+    // pathG = svg.append("g").attr("class", "pathG");
 
-    //Graticule
-    pathG.insert("path")
-        .datum(graticule)
-        .attr("class", "graticule")
-        .attr("d", path)
-
-    //Créer un groupe pour stocker les pays
-    g = pathG.append("g").attr("id", "pays")
-    g_trajet = pathG.append("g").attr("id", "trajet")
-    g_frontieres = pathG.append("g").attr("id", "frontieres")
-
-    var origin = projection.rotate();
-      // origin = [origin[0] + .18, origin[1] + .06];
+    // //Pour mettre une couleur de fond au globe
+    // pathG.append("path")
+    //   .datum({type: "Sphere"})
+    //   .attr("class", "water")
+    //   .attr("d", path)
+    //   .attr("stroke-width", 30)
+    //   .attr("stroke", "white")
+    //   .attr("fill", "white")
 
 
+    // //Rectangle de hover pour les actions utilisateur
+    // pathG.append("rect")
+    //         .attr("class", "overlay")
+    //         .attr("width", containerWidth)
+    //         .attr("height", containerHeight)
+    //         .call(zoomEnhanced)
+    //         .on("mousedown", stopAnimation)
+    //         .on("dblclick.zoom", null)
+    //         .on("contextmenu", function (d, i) {
+    //                 //Empêcher le clic droit pour éviter bug de drag
+    //             d3.event.preventDefault();
+    //         })
+
+    // //Graticule
+    // pathG.insert("path")
+    //     .datum(graticule)
+    //     .attr("class", "graticule")
+    //     .attr("d", path)
+
+    // //Créer un groupe pour stocker les pays
+    // g = pathG.append("g").attr("id", "pays")
+    // g_trajet = pathG.append("g").attr("id", "trajet")
+    // g_frontieres = pathG.append("g").attr("id", "frontieres")
+
+    // var origin = projection.rotate();
+    //   // origin = [origin[0] + .18, origin[1] + .06];
 
 
-    //Loader le geojson
-    d3.json("source/mondeok6.json", function(error, world) {
-      g_frontieres.insert("path", ".frontieres")
-          .datum(topojson.mesh(world, world.objects.mondeok, function(a, b) { return a !== b; }))
-          .attr("class", "boundary")
-          .attr("d", path);
 
 
-      //DESSINER LES PAYS
-      g.selectAll("pays")
-      .data(topojson.feature(world, world.objects.mondeok).features)
-      .enter().append("path")
-      .attr("class", "pays")
-      .attr("id", function(d){
-        return d.properties.iso_a3
-      })
-      .attr("d", path)
-      .attr("fill", function(d){
-        var isoPays = d.properties.iso_a3
-        for(var j=0;j<tableau.length;j++){
-          if(tableau[j].iso3 === isoPays){
-            return "rgba(178,178,178,1)"
-          }
-        }
-        return "rgba(217,217,217,1)"
-      })
-      .attr("stroke-width", "1px")
-      .attr("stroke", "rgba(0,0,0,0.1)")
-      .on("click", function(d){
-                  var iso3 = d.properties.iso_a3
-                  clickPays(iso3)
-                  centrerPays(d, iso3)
-                })
-                .call(zoomEnhanced)
-                .on("contextmenu", function (d, i) {
-                  //Empêcher le clic droit pour éviter bug de drag
-              d3.event.preventDefault();
-          })
-          .on("dblclick.zoom", null)
-                .on("mousedown", stopAnimation)
+    // //Loader le geojson
+    // d3.json("source/mondeok6.json", function(error, world) {
+    //   g_frontieres.insert("path", ".frontieres")
+    //       .datum(topojson.mesh(world, world.objects.mondeok, function(a, b) { return a !== b; }))
+    //       .attr("class", "boundary")
+    //       .attr("d", path);
 
-      //Créer un groupe pour stocker les cercles
-      pathG.append("g").attr("class", "lesCercles")
 
-      //Trier le tableau pour avoir les gros cercles en dessous des petits
-      produce2 = produce.sort(compare)
+    //   //DESSINER LES PAYS
+    //   g.selectAll("pays")
+    //   .data(topojson.feature(world, world.objects.mondeok).features)
+    //   .enter().append("path")
+    //   .attr("class", "pays")
+    //   .attr("id", function(d){
+    //     return d.properties.iso_a3
+    //   })
+    //   .attr("d", path)
+    //   .attr("fill", function(d){
+    //     var isoPays = d.properties.iso_a3
+    //     for(var j=0;j<tableau.length;j++){
+    //       if(tableau[j].iso3 === isoPays){
+    //         return "rgba(178,178,178,1)"
+    //       }
+    //     }
+    //     return "rgba(217,217,217,1)"
+    //   })
+    //   .attr("stroke-width", "1px")
+    //   .attr("stroke", "rgba(0,0,0,0.1)")
+    //   .on("click", function(d){
+    //               var iso3 = d.properties.iso_a3
+    //               clickPays(iso3)
+    //               centrerPays(d, iso3)
+    //             })
+    //             .call(zoomEnhanced)
+    //             .on("contextmenu", function (d, i) {
+    //               //Empêcher le clic droit pour éviter bug de drag
+    //           d3.event.preventDefault();
+    //       })
+    //       .on("dblclick.zoom", null)
+    //             .on("mousedown", stopAnimation)
 
-      //Créer les cercles : en fait c'est pas des circles mais des points (plus facile pour globe)
-      d3.select(".lesCercles").selectAll("path")
-        .data(produce2)
-        .enter()
-                .append("path")
-                .classed("city", true)
-                .datum(function(d) {
-                        return {
-                            type: "Point",
-                            count: d.nbville,
-                            ville: d.name,
-                            iso3: d.iso3,
-                            pays: d.pays,
-                            longitude: d.longitude,
-                            latitude: d.latitude,
-                            coordinates: [d.longitude, d.latitude]
-                        }; })
-                .on("click", function(d){//Lancer une fonction quand on clique sur le cercle
-                  long = d.longitude
-                  lat = d.latitude
-                  ville = d.ville
-                  count = d.count
-                  pays = d.pays
-                  iso = d.iso3
-                  d3.select(".lesCercles").selectAll("path").attr("fill", "rgba(255, 208, 7, 1)").attr("stroke-width", "1px")
-                  $(this).attr("fill", "white")
-                  $(this).attr("stroke-width", "2px")
-                  clickCercles(long, lat, ville, count, pays, iso)
-                })
-                .attr("id", function(d){
-                  return d.ville.split(' ').join('')
-                })
-                .on("contextmenu", function (d, i) {
-                  //Empêcher le clic droit pour éviter bug de drag
-              d3.event.preventDefault();
-          })
-                .call(zoomEnhanced)//Pour qu'on puisse zoomer même quand souris sur cercles et pas sur pays
-                .on("dblclick.zoom", null)
-                .attr("d", path)
-                .attr("title", function(d){//Title pour le tooltip
-                  var ville = d.ville
-                  var pays = d.pays
-                  var count = d.count
-                  if(count==1){
-                    return "<b>"+ville+" ("+pays+")</b><hr>"+count+" artiste"
-                  }else{
-                    return "<b>"+ville+" ("+pays+")</b><hr>"+count+" artistes"
-                  }
+    //   //Créer un groupe pour stocker les cercles
+    //   pathG.append("g").attr("class", "lesCercles")
 
-                })
-                .attr("fill", "rgba(255, 208, 7, 1)")
-                .attr("stroke", "rgba(22, 22, 22, 1)")
+    //   //Trier le tableau pour avoir les gros cercles en dessous des petits
+    //   produce2 = produce.sort(compare)
 
-            //Lancer l'animation du globe qui tourne
-        //startAnimation();
+    //   //Créer les cercles : en fait c'est pas des circles mais des points (plus facile pour globe)
+    //   d3.select(".lesCercles").selectAll("path")
+    //     .data(produce2)
+    //     .enter()
+    //             .append("path")
+    //             .classed("city", true)
+    //             .datum(function(d) {
+    //                     return {
+    //                         type: "Point",
+    //                         count: d.nbville,
+    //                         ville: d.name,
+    //                         iso3: d.iso3,
+    //                         pays: d.pays,
+    //                         longitude: d.longitude,
+    //                         latitude: d.latitude,
+    //                         coordinates: [d.longitude, d.latitude]
+    //                     }; })
+    //             .on("click", function(d){//Lancer une fonction quand on clique sur le cercle
+    //               long = d.longitude
+    //               lat = d.latitude
+    //               ville = d.ville
+    //               count = d.count
+    //               pays = d.pays
+    //               iso = d.iso3
+    //               d3.select(".lesCercles").selectAll("path").attr("fill", "rgba(255, 208, 7, 1)").attr("stroke-width", "1px")
+    //               $(this).attr("fill", "white")
+    //               $(this).attr("stroke-width", "2px")
+    //               clickCercles(long, lat, ville, count, pays, iso)
+    //             })
+    //             .attr("id", function(d){
+    //               return d.ville.split(' ').join('')
+    //             })
+    //             .on("contextmenu", function (d, i) {
+    //               //Empêcher le clic droit pour éviter bug de drag
+    //           d3.event.preventDefault();
+    //       })
+    //             .call(zoomEnhanced)//Pour qu'on puisse zoomer même quand souris sur cercles et pas sur pays
+    //             .on("dblclick.zoom", null)
+    //             .attr("d", path)
+    //             .attr("title", function(d){//Title pour le tooltip
+    //               var ville = d.ville
+    //               var pays = d.pays
+    //               var count = d.count
+    //               if(count==1){
+    //                 return "<b>"+ville+" ("+pays+")</b><hr>"+count+" artiste"
+    //               }else{
+    //                 return "<b>"+ville+" ("+pays+")</b><hr>"+count+" artistes"
+    //               }
+
+    //             })
+    //             .attr("fill", "rgba(255, 208, 7, 1)")
+    //             .attr("stroke", "rgba(22, 22, 22, 1)")
+
+    //         //Lancer l'animation du globe qui tourne
+    //     //startAnimation();
     });
 
     // Changer le rayon de tous les cercles en fonction du nombre de chansons
@@ -1553,20 +1528,19 @@ $(window).load(function () {
 
 })
 
-$(window).resize(function () {
-  responsive()
+// $(window).resize(function () {
+//   responsive()
 
-})
+// })
 
-$(document).scroll(function() {
+// $(document).scroll(function() {
 
 
-});
+// });
 
 $('.conteneur').bind('mousewheel', function(e){
   $("#gifscroll").fadeOut(20)
 })
 
-})//FIN DU DUCOUMENT.READY
 
 
