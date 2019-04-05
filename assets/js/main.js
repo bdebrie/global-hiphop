@@ -19,8 +19,7 @@ $(document).ready(function(){
     window.location.href = "mobile/index.html";
   }
 
-shouldYouTurn="yes"
-villesAffichees="non"
+showCities = false;
 didYouJustDezoom="non"
 resetScale=200
 tableCompteur = []
@@ -30,8 +29,6 @@ distanceTotale = 0
 firstTimeDistance = "oui"
 onglet_distances_ouvert = "non"
 historiqueDistance = []
-
-
 
 
 //  ######    #######   #######   ######   ##       ######## ########   #######   ######
@@ -526,7 +523,7 @@ $(window).load(function () {
 
       //Masquer les consignes
       $("#consignes").css("display", "none")
-      //Virer la typo (sans faire appel à la fonction car on veut pas changer la variable villesAffichees)
+      //Virer la typo (sans faire appel à la fonction car on veut pas changer la variable showCities)
       d3.select(".typo_cercles").remove()
       //D'abord arrêter le mouvement du globe au cas où
       stopAnimation()
@@ -581,7 +578,7 @@ $(window).load(function () {
 
       //Si les villes sont affichees (globalement) alors les remettre sur les nouvelles coordonnées
       //Lancer la fonctiona vec un retard égal à la durée du tween du globe
-      if(villesAffichees=="oui"){
+      if(showCities){
         pathG.append("g").attr("class", "typo_cercles")
         setTimeout(writeCityNames, 1200)
       }
@@ -1085,14 +1082,14 @@ $(window).load(function () {
         .attr("class", "label_villes")
         .text(function(d) { return d.name; })
 
-      villesAffichees = "oui"
+      showCities = true
 
     }
 
 
     deleteCityNames = function(){
       d3.select(".typo_cercles").remove()
-      villesAffichees = "non"
+      showCities = false
     }
 
     position_labels = function() {
