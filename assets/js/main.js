@@ -7,8 +7,6 @@ function responsive() {
 
   if(isThisTheRealWorld == true){
     window.location.href = "mobile/index.html";
-  }else{
-    $("#size-stylesheet").attr("href", "assets/css/main.css");
   }
 
   //Calculer la taille de la fenêtre et du document entier, stocker dans des variables
