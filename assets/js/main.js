@@ -1,30 +1,24 @@
 $(document).ready(function(){
+  // Best practice to define jquery variables at the beginning of the file with a $
+  var $globe = $('.conteneur, #globe');
+  var $container = $('.conteneur');
+  var $volume = $('#image_volume');
 
-//Fonction qui calcule les tailles en fonction de la taille de la fenêtre
-function responsive() {
-  //D'abord on véirifie si on est sur mobile et si oui on load un css particulier
-  var isThisTheRealWorld = checkMobile();
+  // The checkMobile function lives inside js/utils.js for the sake of readability
+  if (!checkMobile()) {
+    var windowHeight = $(window).height();
+    var windowWidth = $(window).width();
 
-  if(isThisTheRealWorld == true){
+    //Les affecteur comme taille au conteneur (qui a une width bloquée sur 850px en css)
+    $globe.css('width', windowWidth)
+    $globe.css('height', windowHeight / 10 * 8.5)
+    $container.css('padding-top', windowHeight / 10 * 1.5)
+
+    $volume.hide()
+  } else {
     window.location.href = "mobile/index.html";
   }
 
-  //Calculer la taille de la fenêtre et du document entier, stocker dans des variables
-  hauteur = $(window).height();
-  largeur = $(window).width();
-  hauteurGene = $(document).height()
-
-  //Les affecteur comme taille au conteneur (qui a une width bloquée sur 850px en css)
-  $(".conteneur, #globe").css("width", largeur)
-  $(".conteneur, #globe").css("height", hauteur/10*8.5)
-  $(".conteneur").css("padding-top", hauteur/10*1.5)
-
-
-  $("#image_volume").hide()
-
-}//FIN DE LA FONCTION RESPONSIVE
-
-responsive()//On appelle la fonction responsive une première fois au chargement
 shouldYouTurn="yes"
 villesAffichees="non"
 didYouJustDezoom="non"
@@ -52,8 +46,6 @@ historiqueDistance = []
 
 
 $(window).load(function () {
-  responsive()
-
   // Création de l'instance de Gselper
   var doc = new Gselper({
 
@@ -133,15 +125,15 @@ $(window).load(function () {
     $(".phrase_titre").html("<span class=\"enJaune\">"+stats.countriesList.length+"</span> pays / <span class=\"enJaune\">"+stats.citiesList.length+"</span> villes / <span class=\"enJaune\">"+stats.tracksCount +"</span> morceaux")
 
     //Caler les dimensions du conteneur
-    width = $(".conteneur").width();
-    height = $(".conteneur").height();
+    containerWidth = $container.width();
+    containerHeight = $container.height();
     ratio = 6;
-    scale = largeur > 1200 ? height / 2.8 : width / 5;
+    scale = windowWidth > 1200 ? containerHeight / 2.8 : containerWidth / 5;
 
     //Initialiser la projection
     projection = d3.geo.orthographic()
       .scale(scale)
-      .translate([width / 2, height / 2])
+      .translate([containerWidth / 2, containerHeight / 2])
       .clipAngle(90)
       .precision(.1);
 
@@ -174,8 +166,8 @@ $(window).load(function () {
     //Et appender un svg sur la div
     svg = d3.select("#globe").append("svg")
       .attr("id", "le_svg")
-        .attr("width", width)
-        .attr("height", height);
+        .attr("width", containerWidth)
+        .attr("height", containerHeight);
 
 
     pathG = svg.append("g").attr("class", "pathG");
@@ -193,8 +185,8 @@ $(window).load(function () {
     //Rectangle de hover pour les actions utilisateur
     pathG.append("rect")
             .attr("class", "overlay")
-            .attr("width", width)
-            .attr("height", height)
+            .attr("width", containerWidth)
+            .attr("height", containerHeight)
             .call(zoomEnhanced)
             .on("mousedown", stopAnimation)
             .on("dblclick.zoom", null)
@@ -1583,6 +1575,5 @@ $('.conteneur').bind('mousewheel', function(e){
 })
 
 })//FIN DU DUCOUMENT.READY
-
 
 
